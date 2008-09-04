@@ -39,7 +39,7 @@ Renderers
 .. autoclass:: CheckBoxFieldRenderer
    :members:
 
-.. autoclass:: FieldRenderer
+.. autoclass:: FileFieldRenderer
    :members:
 
 .. autoclass:: DateFieldRenderer
