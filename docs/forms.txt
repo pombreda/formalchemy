@@ -3,6 +3,9 @@
 
 .. automodule:: formalchemy.forms
 
+.. autoclass:: AbstractFieldSet
+   :members:
+
 .. autoclass:: FieldSet
    :members:
 
