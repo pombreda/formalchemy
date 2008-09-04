@@ -168,8 +168,7 @@ class TextFieldRenderer(FieldRenderer):
 
         >>> from formalchemy.tests import *
         >>> fs = FieldSet(One)
-        >>> fs.add(
-        ...  Field(name='text', value='a value'))
+        >>> fs.add(Field(name='text', value='a value'))
         >>> print fs.text.render()
         <input id="One--text" name="One--text" type="text" value="a value" />
 
@@ -196,8 +195,7 @@ class PasswordFieldRenderer(TextFieldRenderer):
 
         >>> from formalchemy.tests import *
         >>> fs = FieldSet(One)
-        >>> fs.add(
-        ...    Field(name='passwd').with_renderer(PasswordFieldRenderer))
+        >>> fs.add(Field(name='passwd').with_renderer(PasswordFieldRenderer))
         >>> print fs.passwd.render()
         <input id="One--passwd" name="One--passwd" type="password" />
 
@@ -214,9 +212,8 @@ class TextAreaFieldRenderer(FieldRenderer):
 
         >>> from formalchemy.tests import *
         >>> fs = FieldSet(One)
-        >>> fs.add(
-        ...  Field(name='text', value='a value'
-        ...    ).with_renderer(TextAreaFieldRenderer))
+        >>> fs.add(Field(name='text',
+        ...              value='a value').with_renderer(TextAreaFieldRenderer))
         >>> print fs.text.render()
         <textarea id="One--text" name="One--text">a value</textarea>
 
@@ -234,9 +231,8 @@ class HiddenFieldRenderer(FieldRenderer):
 
         >>> from formalchemy.tests import *
         >>> fs = FieldSet(One)
-        >>> fs.add(
-        ...  Field(name='text', value='a value'
-        ...    ).with_renderer(HiddenFieldRenderer))
+        >>> fs.add(Field(name='text',
+        ...              value='a value').with_renderer(HiddenFieldRenderer))
         >>> print fs.text.render()
         <input id="One--text" name="One--text" type="hidden" value="a value" />
 
