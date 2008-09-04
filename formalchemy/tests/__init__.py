@@ -185,13 +185,13 @@ norder2 = NaturalOrder(user=njohn, quantity=5)
 session.commit()
 
 
-from forms import FieldSet as DefaultFieldSet, render_tempita, render_readonly
+from formalchemy.forms import FieldSet as DefaultFieldSet, render_tempita, render_readonly
 try:
     import mako
 except ImportError:
     pass
-from fields import Field, query_options
-from validators import ValidationError
+from formalchemy.fields import Field, query_options
+from formalchemy.validators import ValidationError
 
 def pretty_html(html):
     soup = BeautifulSoup(html)
