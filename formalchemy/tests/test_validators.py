@@ -1,6 +1,6 @@
-from validators import *
 
 __doc__ = """
+>>> from formalchemy.validators import *
 >>> integer('1')
 1
 >>> integer('1.2')
