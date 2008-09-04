@@ -164,6 +164,18 @@ class FieldRenderer(object):
 
 
 class TextFieldRenderer(FieldRenderer):
+    """render a field as a text field::
+
+        >>> from formalchemy.tests import *
+        >>> fs = FieldSet(One)
+        >>> fs.add(
+        ...  Field(name='text', value='a value'))
+        >>> print fs.text.render()
+        <input id="One--text" name="One--text" type="text" value="a value" />
+
+        >>> print fs.text.render_readonly()
+        a value
+    """
     def length(self):
         return self.field.type.length
     length = property(length)
@@ -173,17 +185,24 @@ class TextFieldRenderer(FieldRenderer):
 
 
 class IntegerFieldRenderer(FieldRenderer):
+    """render a field as a text field
+    """
     def render(self, **kwargs):
         return h.text_field(self.name, value=self._value, **kwargs)
 
 
 class PasswordFieldRenderer(TextFieldRenderer):
-    """Render a password field
+    """Render a password field::
 
         >>> from formalchemy.tests import *
         >>> fs = FieldSet(One)
         >>> fs.add(
         ...    Field(name='passwd').with_renderer(PasswordFieldRenderer))
+        >>> print fs.passwd.render()
+        <input id="One--passwd" name="One--passwd" type="password" />
+
+        >>> print fs.passwd.render_readonly()
+        ******
     """
     def render(self, **kwargs):
         return h.password_field(self.name, value=self._value, maxlength=self.length, **kwargs)
@@ -191,6 +210,19 @@ class PasswordFieldRenderer(TextFieldRenderer):
         return '*'*6
 
 class TextAreaFieldRenderer(FieldRenderer):
+    """render a field as a textarea::
+
+        >>> from formalchemy.tests import *
+        >>> fs = FieldSet(One)
+        >>> fs.add(
+        ...  Field(name='text', value='a value'
+        ...    ).with_renderer(TextAreaFieldRenderer))
+        >>> print fs.text.render()
+        <textarea id="One--text" name="One--text">a value</textarea>
+
+        >>> print fs.text.render_readonly()
+        a value
+    """
     def render(self, **kwargs):
         if isinstance(kwargs.get('size'), tuple):
             kwargs['size'] = 'x'.join([str(i) for i in kwargs['size']])
@@ -198,11 +230,28 @@ class TextAreaFieldRenderer(FieldRenderer):
 
 
 class HiddenFieldRenderer(FieldRenderer):
+    """render a field as an hidden field::
+
+        >>> from formalchemy.tests import *
+        >>> fs = FieldSet(One)
+        >>> fs.add(
+        ...  Field(name='text', value='a value'
+        ...    ).with_renderer(HiddenFieldRenderer))
+        >>> print fs.text.render()
+        <input id="One--text" name="One--text" type="hidden" value="a value" />
+
+        >>> print fs.text.render_readonly()
+        <BLANKLINE>
+    """
     def render(self, **kwargs):
         return h.hidden_field(self.name, value=self._value, **kwargs)
+    def render_readonly(self):
+        return ''
 
 
 class CheckBoxFieldRenderer(FieldRenderer):
+    """render a boolean value as checkbox field
+    """
     def render(self, **kwargs):
         return h.check_box(self.name, True, checked=self._value, **kwargs)
     def _serialized_value(self):
@@ -215,6 +264,8 @@ class CheckBoxFieldRenderer(FieldRenderer):
         return FieldRenderer.deserialize(self)
 
 class FileFieldRenderer(FieldRenderer):
+    """render a file input field
+    """
     remove_label = _('Remove')
     def __init__(self, *args, **kwargs):
         FieldRenderer.__init__(self, *args, **kwargs)
@@ -384,6 +435,8 @@ def _extract_options(options):
 
 
 class RadioSet(FieldRenderer):
+    """render a field as radio
+    """
     widget = staticmethod(h.radio_button)
 
     def render(self, options, **kwargs):
@@ -398,6 +451,8 @@ class CheckBoxSet(RadioSet):
 
 
 class SelectFieldRenderer(FieldRenderer):
+    """render a field as select
+    """
     def render(self, options, **kwargs):
         selected = kwargs.get('selected', None) or self._value
         return h.select(self.name, h.options_for_select(options, selected=selected), **kwargs)
