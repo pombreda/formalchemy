@@ -180,15 +180,10 @@ class IntegerFieldRenderer(FieldRenderer):
 class PasswordFieldRenderer(TextFieldRenderer):
     """Render a password field
 
-        >>> from regression import *
+        >>> from formalchemy.tests import *
         >>> fs = FieldSet(One)
         >>> fs.add(
         ...    Field(name='passwd').with_renderer(PasswordFieldRenderer))
-        >>> print fs.passwd.render()
-        <input id="One--passwd" name="One--passwd" type="password" />
-
-        >>> print fs.passwd.render_readonly()
-        ******
     """
     def render(self, **kwargs):
         return h.password_field(self.name, value=self._value, maxlength=self.length, **kwargs)
@@ -276,7 +271,7 @@ class FileFieldRenderer(FieldRenderer):
 class DateFieldRenderer(FieldRenderer):
     """Render a date field
 
-        >>> from regression import *
+        >>> from tests import *
         >>> from datetime import datetime
         >>> date = datetime(2000, 12, 31, 9, 00)
         >>> fs = FieldSet(One)
@@ -318,7 +313,7 @@ class DateFieldRenderer(FieldRenderer):
 class TimeFieldRenderer(FieldRenderer):
     """Render a time field
 
-        >>> from regression import *
+        >>> from tests import *
         >>> from datetime import datetime
         >>> date = datetime(2000, 12, 31, 9, 03, 30)
         >>> fs = FieldSet(One)
@@ -355,7 +350,7 @@ class TimeFieldRenderer(FieldRenderer):
 class DateTimeFieldRendererRenderer(DateFieldRenderer, TimeFieldRenderer):
     """Render a date time field
 
-        >>> from regression import *
+        >>> from tests import *
         >>> from datetime import datetime
         >>> date = datetime(2000, 12, 31, 9, 03, 30)
         >>> fs = FieldSet(One)
