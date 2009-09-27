@@ -1,0 +1,21 @@
+syntax: glob
+
+bin
+dist
+build
+eggs
+parts
+develop-eggs
+Paste*.egg
+docs/_build
+pylonsapp/data/
+pylonsapp/development.db
+pylonsapp/pylonsapp/public/*/*/*/*.txt
+.installed.cfg
+.coverage
+*.egg-info
+*.swp
+*.pyc
+*.pyo
+*.log
+

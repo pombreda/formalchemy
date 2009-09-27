@@ -1,0 +1,172 @@
+:mod:`formalchemy.ext.pylons` -- Pylons extensions
+==================================================
+
+.. automodule:: formalchemy.ext.pylons
+
+Administration interface
+************************
+
+Purpose
+-------
+
+The Pylons administration interface provides a simple way to enable
+CRUD (create, retrieve, update, delete) operations on your SQLAlchemy
+models, with a high degree of customizability.
+
+Sample model listing:
+
+.. image:: admin-models.png
+
+Sample model overview page:
+
+.. image:: admin-listing.png
+
+Sample model creation page:
+
+.. image:: admin-new.png
+
+
+Setup
+-----
+
+First, generate a controller in your application::
+
+  $ paster controller admin
+
+Next, edit your ``controllers/admin.py``, replacing ``pylonsapp`` with your application name:
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/controllers/admin.py
+
+Add these lines in ``config/routing.py``:
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/config/routing.py
+
+All done!  Now you can go to the ``/admin/`` url.
+
+
+Customization
+-------------
+
+`FormAlchemyAdminController` creates a new class having `AdminControllerBase`
+and the internal FA admin controller (formalchemy.ext.pylons.AdminController) 
+as its parent classes, in that order.  
+
+So, you can do simple customization just by overriding the admin controller
+methods (`index`, `list`, `edit`, `delete` -- create is just edit with `id=None`) 
+in `AdminControllerBase`, e.g.,::
+
+  class AdminControllerBase(BaseController):
+      ...
+
+      @auth_required
+      def edit(self, *args, **kwargs):
+          return super(AdminControllerBase, self).edit(*args, **kwargs)
+
+To customize the forms used to list and edit your objects, 
+create a module `yourapp.forms` and specify that
+as the forms module in AdminController.  In this module, create 
+:class:`~formalchemy.forms.FieldSet` (for create and edit forms)
+and :class:`~formalchemy.tables.Grid` (for object lists) 
+instances for the models you wish to customize.  (The `Grids` will
+automatically get edit and delete links added, and be made readonly.)
+
+See :mod:`~formalchemy.forms` for details on form configuration.
+
+
+Troubleshooting
+---------------
+
+If you click on a model link from the top-level admin page and get
+"NotImplementedError: Action '<modelname>' is not implemented," then
+your routing hasn't been properly configured for the admin app.  See
+"Add these lines in `config/routing.py`" above.
+
+If you don't see all your models on the top-level admin page, you'll
+need to import them into your model module, or tell `FormAlchemy` the
+correct module to look in (the "model = " line in the controller class
+you created).  In particular, `FormAlchemy` does not recursively scan
+for models, so if you have models in e.g., `model/foo.py`, you will want
+to add `from foo import *` in `model/__init__.py`.
+
+Sample app 
+----------
+
+You can have a look at the complete `source
+<http://code.google.com/p/formalchemy/source/browse/#svn/trunk/pylonsapp>`_ of
+the application used for FA's testing.
+
+.. _restfulcontroller:
+
+RESTful controller
+******************
+
+.. automodule:: formalchemy.ext.pylons.controller
+
+You can use your fieldset as a REST resource.
+
+Listing::
+
+    GET /owners
+
+Get objects url via json::
+
+    GET /owners.json
+
+    GET /owners.json?page=2
+
+    GET /owners
+    Accept: application/json
+
+New object with form::
+
+    GET /owners/new
+
+New object with json POST::
+
+    POST /owners.json
+    name:name
+    animals: 1
+
+View object with form::
+
+    GET /owners/1
+
+Get jsonify fieldset::
+
+    GET /owners/1.json
+
+Edit object with form::
+
+    GET /owners/1/edit
+
+Edit object with json PUT::
+
+    PUT /owners/1.json
+
+    {"name": "name", "animals": []}
+
+
+Usage
+------
+
+Use the FieldSetController to wrap your Pylons controller:
+
+.. autofunction:: formalchemy.ext.pylons.controller.FieldSetController
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/controllers/owners.py
+
+Add this to your ``config/routing.py``:
+
+.. sourcecode:: py
+
+  map.resource('owner', 'owners')
+
+Customisation
+--------------
+
+You can override the following methods:
+
+.. autoclass:: formalchemy.ext.pylons.controller._FieldSetController
+   :members:
+
+
