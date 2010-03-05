@@ -1,0 +1,65 @@
+:mod:`formalchemy.ext.fsblob` -- File system renderer
+=====================================================
+
+This extension is used to store binary files/images on filesystem and only
+store the file path in the database.
+
+This page present a Pylons integration but it should work on most framework.
+
+.. automodule:: formalchemy.ext.fsblob
+
+Renderers
+---------
+
+.. autoclass:: FileFieldRenderer
+   :members:
+
+.. autoclass:: ImageFieldRenderer
+   :members:
+
+
+Usage
+-----
+
+You must override the `storage_path` attribute:
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/forms/fsblob.py
+
+As you can see, you can use it like all :mod:`~formalchemy.fields` in the
+`.configure` method.
+
+Validators
+----------
+
+Work like all :mod:`~formalchemy.validators`.
+
+.. autofunction:: file_extension
+
+    >>> from formalchemy.ext.fsblob import file_extension
+    >>> validator = file_extension(extensions=['txt'])
+    >>> validator('my image.txt')
+
+    >>> validator('my image.png') # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    ValidationError: Invalid file extension. Must be txt
+
+
+.. autofunction:: image_extension
+
+    >>> from formalchemy.ext.fsblob import image_extension
+    >>> validator = image_extension()
+    >>> validator('my image.png')
+
+    >>> validator('my image.txt') # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    ValidationError: Invalid image file. Must be jpeg, jpg, gif, png
+
+Sample app 
+----------
+
+You can have a look at the complete `source
+<http://code.google.com/p/formalchemy/source/browse/#svn/trunk/pylonsapp>`_ of
+the application used for FA's testing.
+
