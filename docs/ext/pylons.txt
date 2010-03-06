@@ -1,0 +1,161 @@
+:mod:`formalchemy.ext.pylons` -- Pylons extensions
+==================================================
+
+.. automodule:: formalchemy.ext.pylons.controller
+
+Administration interface
+************************
+
+Purpose
+-------
+
+The Pylons administration interface provides a simple way to enable
+CRUD (create, retrieve, update, delete) operations on your SQLAlchemy
+models, with a high degree of customizability.
+
+Sample model listing:
+
+.. image:: admin-models.png
+
+Sample model overview page:
+
+.. image:: admin-listing.png
+
+Sample model creation page:
+
+.. image:: admin-new.png
+
+
+Setup
+-----
+
+First, generate a controller in your application::
+
+  $ paster controller admin
+
+Next, edit your ``controllers/admin.py``, replacing ``pylonsapp`` with your
+application name:
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/controllers/admin.py
+
+Now you need to configure your routing. As an example here is the
+``routing.py`` used for testing the UI. Check ``fa_static`` and the ``/admin``
+part:
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/config/routing.py
+
+All done!  Now you can go to the ``/admin/`` url.
+
+
+Customization
+-------------
+
+:class:`~formalchemy.ext.pylons.controller.ModelsController` creates a new
+class having `AdminControllerBase` and the internal FA models controller
+(:class:`~formalchemy.ext.pylons.controller._ModelsController`) as its parent
+classes, in that order.  
+
+So, you can do simple customization just by overriding the
+:class:`~formalchemy.ext.pylons.controller._ModelsController` methods  in
+`AdminControllerBase`, e.g.,::
+
+  class AdminControllerBase(BaseController):
+      ...
+
+      @auth_required
+      def edit(self, *args, **kwargs):
+          return super(AdminControllerBase, self).edit(*args, **kwargs)
+
+To customize the forms used to list and edit your objects, 
+create a module `yourapp.forms` and specify that
+as the forms module in AdminController.  In this module, create 
+:class:`~formalchemy.forms.FieldSet` (for create and edit forms)
+and :class:`~formalchemy.tables.Grid` (for object lists) 
+instances for the models you wish to customize.  (The `Grids` will
+automatically get edit and delete links added, and be made readonly.)
+
+See :mod:`~formalchemy.forms` for details on form configuration.
+
+API
+---
+
+.. autofunction:: ModelsController
+
+.. autoclass:: _ModelsController
+
+   See also :class:`~formalchemy.ext.pylons.controller._RESTController`
+
+   **model**
+      Models module or list of models
+
+   **forms**
+      Forms module or None
+
+   **FieldSet**
+      A FieldSet class. Default to :class:`~formalchemy.forms.FieldSet`
+
+   **Grid**
+      A Grid class. Default to :class:`~formalchemy.tables.Grid``
+
+Troubleshooting
+---------------
+
+If you don't see all your models on the top-level admin page, you'll
+need to import them into your model module, or tell `FormAlchemy` the
+correct module to look in (the "model = " line in the controller class
+you created).  In particular, `FormAlchemy` does not recursively scan
+for models, so if you have models in e.g., `model/foo.py`, you will want
+to add `from foo import *` in `model/__init__.py`.
+
+Sample app 
+----------
+
+You can have a look at the complete `source
+<http://code.google.com/p/formalchemy/source/browse/#hg/trunk/pylonsapp>`_ of
+the application used for FA's testing.
+
+.. _restfulcontroller:
+
+RESTful controller
+******************
+
+This module provide a RESTful controller for formalchemy's FieldSets.
+
+You can use your fieldset as a REST resource. And yes, it's also work with JSON.
+
+Usage
+------
+
+Use the FieldSetController to wrap your Pylons controller:
+
+.. autofunction:: formalchemy.ext.pylons.controller.RESTController
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/controllers/owners.py
+
+Add this to your ``config/routing.py``:
+
+.. sourcecode:: py
+
+  map.resource('owner', 'owners')
+
+Customisation
+--------------
+
+You can override the following methods:
+
+.. autoclass:: formalchemy.ext.pylons.controller._RESTController
+   :members: Session, get_model, get, get_fieldset, get_add_fieldset, get_grid, get_page, sync
+
+Here is a customisation sample to use CouchDB as backend using the :class:`~formalchemy.ext.pylons.controller.ModelsController` (~= API):
+
+.. literalinclude:: ../../pylonsapp/pylonsapp/controllers/couchdb.py
+
+Helpers
+-------
+
+.. autofunction:: model_url
+
+.. autoclass:: Session
+   :members:
+
+

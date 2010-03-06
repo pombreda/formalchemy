@@ -1,0 +1,36 @@
+:mod:`formalchemy.ext.zope` -- zope.schema support
+**************************************************
+
+.. automodule:: formalchemy.ext.zope
+
+
+Classes definitions
+===================
+
+
+Field
+--------
+
+.. autoclass:: Field
+
+FieldSet
+--------
+
+.. autoclass:: FieldSet
+
+Grid
+--------
+
+.. autoclass:: Grid
+
+Utilities
+----------
+
+.. autoclass:: Pk
+
+.. autoclass:: FlexibleModel
+
+.. autoclass:: FlexibleDict
+
+.. autofunction:: gen_model
+
