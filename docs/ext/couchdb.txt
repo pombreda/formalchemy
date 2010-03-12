@@ -1,0 +1,37 @@
+:mod:`formalchemy.ext.couchdb` -- CouchDB support
+**************************************************
+
+This module provides a subclass of :class:`~formalchemy.forms.FieldSet` to support couchdbkit_'s schema. 
+
+.. _couchdbkit: http://couchdbkit.org/ 
+
+Usage
+=====
+
+.. automodule:: formalchemy.ext.couchdb
+
+Classes definitions
+===================
+
+FieldSet
+--------
+
+.. autoclass:: FieldSet
+
+Grid
+--------
+
+.. autoclass:: Grid
+
+Session
+--------
+
+.. autoclass:: Session
+   :members:
+
+Query
+--------
+
+.. autoclass:: Query
+   :members:
+
