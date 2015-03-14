@@ -1,0 +1,1 @@
+Documentation for the 1.0 release is at http://docs.formalchemy.org/index.html
